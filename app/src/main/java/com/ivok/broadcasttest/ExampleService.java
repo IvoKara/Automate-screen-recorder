@@ -1,5 +1,6 @@
 package com.ivok.broadcasttest;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,6 +11,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +35,7 @@ import android.view.Surface;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 
 import com.hbisoft.hbrecorder.HBRecorderCodecInfo;
 import com.hbisoft.hbrecorder.NotificationReceiver;
@@ -72,10 +75,10 @@ public class ExampleService extends Service {
     private final boolean isCustomSettingsEnabled = true;
     private boolean hasMaxFileBeenReached = false;
 
-    private int orientationHint = 0;
-    private int mScreenDensity = 480;
-    private int mScreenWidth = 1080;
-    private int mScreenHeight = 2160;
+    private int orientationHint = 400;
+    private int mScreenDensity;
+    private int mScreenWidth;
+    private int mScreenHeight;
     private int mResultCode; //RESULT_OK
     private Intent mResultData; /* caution */
     private MediaProjection mMediaProjection;
@@ -122,21 +125,23 @@ public class ExampleService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void createFolder() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ContentResolver resolver = getContentResolver();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/" + folderName);
-            contentValues.put(MediaStore.Video.Media.TITLE, fileName);
-            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
-            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
-            returnedUri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues);
-            //FILE NAME SHOULD BE THE SAME
-        } else {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            ContentResolver resolver = getContentResolver();
+//            ContentValues contentValues = new ContentValues();
+//            contentValues.put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/" + folderName);
+//            contentValues.put(MediaStore.Video.Media.TITLE, fileName);
+//            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
+//            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
+//            returnedUri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues);
+//            Log.i("URI", returnedUri.toString());
+//        } else {
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             File f1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), folderName);
             if (!f1.exists()) {
                 if (f1.mkdirs()) {
                     Log.i("Folder ", "created");
                 }
+
             }
         }
     }
@@ -156,6 +161,7 @@ public class ExampleService extends Service {
 
         fileName = name + ".mp4";
 
+        Log.e("Filepath", filePath);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -182,19 +188,19 @@ public class ExampleService extends Service {
         mMediaRecorder.setVideoEncoder(videoEncoderAsInt);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            try {
-                ContentResolver contentResolver = getContentResolver();
-                FileDescriptor inputPFD = Objects.requireNonNull(contentResolver.openFileDescriptor(returnedUri, "rw")).getFileDescriptor();
-                mMediaRecorder.setOutputFile(inputPFD);
-            } catch (Exception e) {
-                Log.e(TAG, "Error on MediaRecorder");
-                Toast.makeText(this, "Error on MediaRecorder", Toast.LENGTH_SHORT).show();
-            }
-        } else {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            try {
+//                ContentResolver contentResolver = getContentResolver();
+//                FileDescriptor inputPFD = Objects.requireNonNull(contentResolver.openFileDescriptor(returnedUri, "rw")).getFileDescriptor();
+//                mMediaRecorder.setOutputFile(inputPFD);
+//            } catch (Exception e) {
+//                Log.e(TAG, "Error on MediaRecorder");
+//                Toast.makeText(this, "Error on MediaRecorder", Toast.LENGTH_SHORT).show();
+//            }
+//        } else {
             mMediaRecorder.setOutputFile(filePath);
             Log.e("filepath", filePath);
-        }
+//        }
         Log.d("Android version", String.valueOf(Build.VERSION.SDK_INT));
         mMediaRecorder.setVideoSize(mScreenWidth, mScreenHeight);
 
@@ -308,14 +314,14 @@ public class ExampleService extends Service {
         try {
             initRecorder();
         } catch (Exception e) {
-            Log.e(TAG, "Error on init Recorder");
+            Log.e(TAG, "Error on init Recorder: " + e.getMessage());
         }
 
         //Init MediaProjection
         try {
             initMediaProjection();
         } catch (Exception e) {
-            Log.e(TAG, "Error on init MediaProjection");
+            Log.e(TAG, "Error on init MediaProjection: " + e.getMessage());
         }
 
         //Init VirtualDisplay
