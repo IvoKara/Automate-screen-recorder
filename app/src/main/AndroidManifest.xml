@@ -34,14 +34,18 @@
                 <action android:name="com.ivok.STOP_SERVICE" />
             </intent-filter>
         </receiver>
-       <!-- <receiver
+        <receiver
             android:name=".BootBroadcast"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
-        </receiver> -->
+        </receiver>
 
         <service
             android:name=".ExampleService"
