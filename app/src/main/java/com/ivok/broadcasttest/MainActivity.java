@@ -33,8 +33,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 import static com.hbisoft.hbrecorder.Constants.MAX_FILE_SIZE_REACHED_ERROR;
@@ -45,45 +47,67 @@ public class MainActivity extends AppCompatActivity {
     private static final int SCREEN_RECORD_REQUEST_CODE = 777;
     private static final int PERMISSION_REQ_ID_RECORD_AUDIO = 22;
     private static final int PERMISSION_REQ_ID_WRITE_EXTERNAL_STORAGE = PERMISSION_REQ_ID_RECORD_AUDIO + 1;
+    public static boolean isActive = false;
 
-   /* private BroadcastReceiver br = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
+//    public MainActivity() {
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            startRecordingScreen();
+//        }
+//    }
 
-        }
-    };*/
+    public static void requestProjectionIntentActivity(Context ctx) {
+        Intent pIntent = new Intent(ctx, MainActivity.class);
+        pIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        ctx.startActivity(pIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isActive = false;
+        Toast.makeText(this, "Destroy", Toast.LENGTH_SHORT).show();
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        startRecordingScreen();
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void startRecordingScreen() {
+//        setContentView(R.layout.activity_main);
+        isActive = true;
         MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         Intent permissionIntent = mediaProjectionManager != null ? mediaProjectionManager.createScreenCaptureIntent() : null;
+        listExtras(permissionIntent);
         startActivityForResult(permissionIntent, SCREEN_RECORD_REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e("ActivityResult", "" + RESULT_OK);
         if (requestCode == SCREEN_RECORD_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 //Start screen recording
                 ExampleBroadcastReceiver.resultCode = resultCode;
                 ExampleBroadcastReceiver.data = data;
+                listExtras(data);
+                this.moveTaskToBack(true);
+//                MainActivity.this.finish();
             }
         }
     }
 
+    private void listExtras(Intent i) {
+        Bundle bundle = i.getExtras();
+        if(bundle != null) {
+            Iterator<String> iterator = bundle.keySet().iterator();
+            while(iterator.hasNext()) {
+                String key = iterator.next();
+                Log.e("Extra", "[" + key + "=" + bundle.get(key) + "]");
+                //i.getParcelableExtra(key);
+            }
+
+        }
+    }
 
 }

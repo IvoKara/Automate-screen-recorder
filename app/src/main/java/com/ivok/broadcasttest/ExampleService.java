@@ -62,9 +62,9 @@ public class ExampleService extends Service {
 
     private static final String TAG = "ExampleService";
 
-    private final int videoEncoderAsInt = MediaRecorder.VideoEncoder.H264;    // MPEG_4_SP
+    private final int videoEncoderAsInt = MediaRecorder.VideoEncoder.H264;    // H264
     private final int outputFormatAsInt = MediaRecorder.OutputFormat.MPEG_4;    // MPEG_4
-    private final int audioSourceAsInt = MediaRecorder.AudioSource.MIC;     // MIC
+    private int audioSourceAsInt;     // MIC or VOICE_RECOGNITION(Android 10)
     private final int videoFrameRate = 30;      //30FPS
     private final int videoBitrate = 4000000;  //4Mbps
     private final int audioBitrate = 128000;
@@ -139,7 +139,7 @@ public class ExampleService extends Service {
             File f1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), folderName);
             if (!f1.exists()) {
                 if (f1.mkdirs()) {
-                    Log.i("Folder ", "created");
+                    Log.d("Folder ", "created");
                 }
 
             }
@@ -161,7 +161,7 @@ public class ExampleService extends Service {
 
         fileName = name + ".mp4";
 
-        Log.e("Filepath", filePath);
+        Log.d("Filepath", filePath);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -199,7 +199,7 @@ public class ExampleService extends Service {
 //            }
 //        } else {
             mMediaRecorder.setOutputFile(filePath);
-            Log.e("filepath", filePath);
+            //Log.e("filepath", filePath);
 //        }
         Log.d("Android version", String.valueOf(Build.VERSION.SDK_INT));
         mMediaRecorder.setVideoSize(mScreenWidth, mScreenHeight);
@@ -235,7 +235,7 @@ public class ExampleService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initMediaProjection() {
         mMediaProjection = ((MediaProjectionManager) Objects.requireNonNull(getSystemService(Context.MEDIA_PROJECTION_SERVICE))).getMediaProjection(mResultCode, mResultData);
-        Log.e("MediaProjection", String.valueOf(mMediaProjection));
+        Log.e("MediaProjection", String.valueOf(mMediaProjection)); //check if null
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -256,6 +256,14 @@ public class ExampleService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, TAG + " started", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onStartCommand");
+
+
+        //on POT.. only works voice recognition
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            audioSourceAsInt = MediaRecorder.AudioSource.VOICE_RECOGNITION;
+        } else {
+            audioSourceAsInt = MediaRecorder.AudioSource.MIC;
+        }
 
         mIntent = intent;
         mScreenWidth = intent.getIntExtra("width", 0);
