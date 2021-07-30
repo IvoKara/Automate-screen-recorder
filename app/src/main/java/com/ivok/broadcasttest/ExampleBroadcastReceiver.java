@@ -50,6 +50,10 @@ public class ExampleBroadcastReceiver extends BroadcastReceiver/* implements HBR
 
         if("com.ivok.START_SERVICE".equals(intent.getAction())) {
 
+//            Intent i = new Intent(context, MainActivity.class);
+//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            context.startActivity(i);
+
             isFinished = false;
 
             DisplayMetrics displayMetrics = new DisplayMetrics();
