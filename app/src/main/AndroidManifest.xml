@@ -13,13 +13,16 @@
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:requestLegacyExternalStorage="true"
-        android:theme="@style/Theme.AppCompat">
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat"
+            >
+            <!--android:persistableMode=""
             android:alwaysRetainTaskState="true"
-            android:excludeFromRecents="true">
-            <!--android:persistableMode=""-->
+            android:excludeFromRecents="true"
+            -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

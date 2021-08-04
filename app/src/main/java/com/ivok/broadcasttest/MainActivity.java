@@ -49,18 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQ_ID_WRITE_EXTERNAL_STORAGE = PERMISSION_REQ_ID_RECORD_AUDIO + 1;
     public static boolean isActive = false;
 
-//    public MainActivity() {
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            startRecordingScreen();
-//        }
-//    }
-
-    public static void requestProjectionIntentActivity(Context ctx) {
-        Intent pIntent = new Intent(ctx, MainActivity.class);
-        pIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        ctx.startActivity(pIntent);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -73,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         isActive = true;
         MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         Intent permissionIntent = mediaProjectionManager != null ? mediaProjectionManager.createScreenCaptureIntent() : null;
-        listExtras(permissionIntent);
+//        listExtras(permissionIntent);
         startActivityForResult(permissionIntent, SCREEN_RECORD_REQUEST_CODE);
     }
 
@@ -90,9 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 //Start screen recording
                 ExampleBroadcastReceiver.resultCode = resultCode;
                 ExampleBroadcastReceiver.data = data;
-                listExtras(data);
-                this.moveTaskToBack(true);
-//                MainActivity.this.finish();
+//                listExtras(data);
+                this.finish();
             }
         }
     }

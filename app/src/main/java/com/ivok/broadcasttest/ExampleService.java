@@ -234,7 +234,9 @@ public class ExampleService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initMediaProjection() {
-        mMediaProjection = ((MediaProjectionManager) Objects.requireNonNull(getSystemService(Context.MEDIA_PROJECTION_SERVICE))).getMediaProjection(mResultCode, mResultData);
+        mMediaProjection = ((MediaProjectionManager) Objects.requireNonNull(
+                getSystemService(Context.MEDIA_PROJECTION_SERVICE))
+        ).getMediaProjection(mResultCode, mResultData);
         Log.e("MediaProjection", String.valueOf(mMediaProjection)); //check if null
     }
 
