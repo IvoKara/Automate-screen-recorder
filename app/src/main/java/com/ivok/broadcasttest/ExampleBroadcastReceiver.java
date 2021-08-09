@@ -50,51 +50,27 @@ public class ExampleBroadcastReceiver extends BroadcastReceiver/* implements HBR
 
         if("com.ivok.START_SERVICE".equals(intent.getAction())) {
 
-            if(data == null) {
-                Intent i = new Intent(context, QueryActivity.class);
-//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
-            }
+            Intent i = new Intent(context, QueryActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
 
             isFinished = false;
 
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
-            wm.getDefaultDisplay().getRealMetrics(displayMetrics);
-            int displayWidth = displayMetrics.widthPixels;
-            int displayHeight = displayMetrics.heightPixels;
-            int displayDensity = displayMetrics.densityDpi;
-
-            Configuration configuration = context.getResources().getConfiguration();
-            boolean isLandscape = configuration.orientation == ORIENTATION_LANDSCAPE;
-
-            serviceIntent.putExtra("width", displayWidth);
-            serviceIntent.putExtra("height", displayHeight);
-            serviceIntent.putExtra("density", displayDensity);
-            serviceIntent.putExtra("resultCode", resultCode);
-            serviceIntent.putExtra("data", data);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                context.startForegroundService(serviceIntent);
-            else
-                context.startService(serviceIntent);
-
-            Log.d("BroadcastReceiver", "Start Command sent");
             //Toast.makeText(context, "Autostart started", Toast.LENGTH_SHORT).show();
 
-            int minutes = 10;
-            new CountDownTimer(minutes*60*1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    isFinished = true;
-                    context.stopService(serviceIntent);
-                }
-            }.start();
+//            int minutes = 10;
+//            new CountDownTimer(minutes*60*1000, 1000) {
+//                @Override
+//                public void onTick(long millisUntilFinished) {
+//
+//                }
+//
+//                @Override
+//                public void onFinish() {
+//                    isFinished = true;
+//                    context.stopService(serviceIntent);
+//                }
+//            }.start();
         }
         if("com.ivok.STOP_SERVICE".equals(intent.getAction())) {
             if(!isFinished) {
