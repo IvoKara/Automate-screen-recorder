@@ -16,7 +16,7 @@
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".QueryActivity"
-            android:theme="@style/Theme.AppCompat.Light"
+            android:theme="@android:style/Theme.NoDisplay"
 
             />
         <!--
