@@ -37,10 +37,6 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
-import com.hbisoft.hbrecorder.HBRecorderCodecInfo;
-import com.hbisoft.hbrecorder.NotificationReceiver;
-import com.hbisoft.hbrecorder.ScreenRecordService;
-
 import java.io.File;
 import java.io.FileDescriptor;
 import java.sql.Date;
@@ -48,15 +44,6 @@ import java.text.SimpleDateFormat;
 import java.util.AbstractQueue;
 import java.util.Locale;
 import java.util.Objects;
-
-import static com.hbisoft.hbrecorder.Constants.ERROR_KEY;
-import static com.hbisoft.hbrecorder.Constants.ERROR_REASON_KEY;
-import static com.hbisoft.hbrecorder.Constants.MAX_FILE_SIZE_KEY;
-import static com.hbisoft.hbrecorder.Constants.MAX_FILE_SIZE_REACHED_ERROR;
-import static com.hbisoft.hbrecorder.Constants.NO_SPECIFIED_MAX_SIZE;
-import static com.hbisoft.hbrecorder.Constants.ON_START;
-import static com.hbisoft.hbrecorder.Constants.ON_START_KEY;
-import static com.hbisoft.hbrecorder.Constants.SETTINGS_ERROR;
 
 public class ExampleService extends Service {
 
@@ -93,17 +80,13 @@ public class ExampleService extends Service {
     private static String filePath;
     private static String fileName;
 
-
-    private final long maxFileSize = NO_SPECIFIED_MAX_SIZE;
     private Uri returnedUri = null;
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         return null;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -121,9 +104,24 @@ public class ExampleService extends Service {
             mMediaProjection.stop();
             mMediaProjection = null;
         }
+        FFmpegUsage ffmpeg = new FFmpegUsage(fileName);
+//        DeleteFile(filePath);
+//        SendSyncBroadcast(ffmpeg.getFolderName());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void SendSyncBroadcast(String folderName) {
+        Intent i = new Intent("com.ivok.SYNC_FOLDER");
+        i.putExtra("folderName", folderName);
+        sendBroadcast(i);
+    }
+
+    private void DeleteFile(String path) {
+        File video = new File(path);
+        if(video.delete()) {
+            Log.d(TAG, "Deleted recording file");
+        }
+    }
+
     private void createFolder() {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //            ContentResolver resolver = getContentResolver();
@@ -157,14 +155,13 @@ public class ExampleService extends Service {
 
         String name = videoQuality + curTime;
 
-        filePath = path + "/" + name + ".mp4";
-
         fileName = name + ".mp4";
+
+        filePath = path + "/" + fileName;
 
         Log.d("Filepath", filePath);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initRecorder() throws Exception {
         mMediaRecorder = new MediaRecorder();
 
@@ -219,11 +216,6 @@ public class ExampleService extends Service {
             mMediaRecorder.setVideoFrameRate(videoFrameRate);
         }
 
-        // Catch approaching file limit
-        if ( maxFileSize > NO_SPECIFIED_MAX_SIZE) {
-            mMediaRecorder.setMaxFileSize(maxFileSize); // in bytes
-        }
-
         try {
             mMediaRecorder.prepare();
         } catch (Exception e) {
@@ -232,7 +224,6 @@ public class ExampleService extends Service {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initMediaProjection() {
 
         Log.e("MediaProjection", "data: " + mResultData);
@@ -243,7 +234,6 @@ public class ExampleService extends Service {
         Log.e("MediaProjection", String.valueOf(mMediaProjection)); //check if null
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initVirtualDisplay() {
         Log.e("VirtualDisplay", String.valueOf(mMediaRecorder));
         Log.d("width", String.valueOf(mScreenWidth));
@@ -256,7 +246,6 @@ public class ExampleService extends Service {
         mVirtualDisplay = mMediaProjection.createVirtualDisplay(TAG, mScreenWidth, mScreenHeight, mScreenDensity, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, s, null, null);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, TAG + " started", Toast.LENGTH_SHORT).show();

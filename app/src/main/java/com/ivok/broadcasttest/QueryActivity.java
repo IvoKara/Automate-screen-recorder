@@ -36,7 +36,6 @@ public class QueryActivity extends Activity {
         setContentView(R.layout.activity_query);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onStart() {
         super.onStart();

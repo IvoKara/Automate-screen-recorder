@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.ivok.broadcasttest"
-        minSdkVersion 17
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -30,7 +30,7 @@ android {
 
 dependencies {
 
-    implementation 'com.github.HBiSoft:HBRecorder:2.0.0'
+    implementation "com.arthenica:ffmpeg-kit-full:4.4"
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'

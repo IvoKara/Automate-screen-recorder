@@ -24,10 +24,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.hbisoft.hbrecorder.HBRecorder;
-import com.hbisoft.hbrecorder.HBRecorderCodecInfo;
-import com.hbisoft.hbrecorder.HBRecorderListener;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,19 +34,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
-import static com.hbisoft.hbrecorder.Constants.MAX_FILE_SIZE_REACHED_ERROR;
-import static com.hbisoft.hbrecorder.Constants.SETTINGS_ERROR;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Intent i = new Intent(this, QueryActivity.class);
-////        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(i);
     }
 
 }

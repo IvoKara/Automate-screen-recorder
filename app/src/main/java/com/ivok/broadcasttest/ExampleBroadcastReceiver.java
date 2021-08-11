@@ -9,9 +9,11 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
@@ -24,25 +26,25 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.hbisoft.hbrecorder.HBRecorder;
-import com.hbisoft.hbrecorder.HBRecorderCodecInfo;
-import com.hbisoft.hbrecorder.HBRecorderListener;
+import com.arthenica.ffmpegkit.FFmpegKit;
+import com.arthenica.ffmpegkit.FFmpegSession;
+import com.arthenica.ffmpegkit.ReturnCode;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.WINDOW_SERVICE;
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
-
-public class ExampleBroadcastReceiver extends BroadcastReceiver/* implements HBRecorderListener */{
-
-    public static int resultCode;
-    public static Intent data;
+public class ExampleBroadcastReceiver extends BroadcastReceiver {
 
     private boolean isFinished;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onReceive(Context context, Intent intent) {
 
