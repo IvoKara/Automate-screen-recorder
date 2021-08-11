@@ -17,26 +17,25 @@ import java.util.Locale;
 
 public class FFmpegUsage {
 
-    private String folderName;
+    private String folderPath;
 
     public FFmpegUsage(String videoName) {
         segmentateVideo(videoName);
     }
 
-    public String getFolderName() {
-        return folderName;
+    public String getFolderPath() {
+        return folderPath;
     }
 
     private void segmentateVideo(String videoName) {
         String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath() + "/.broadcasttest/";
 
-        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd_HH-mm", Locale.getDefault());
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd_HH-mm-ss", Locale.getDefault());
         Date curDate = new Date(System.currentTimeMillis());
         String time = formatter.format(curDate);
 
-        folderName = "segments_" + time;
-
-        String segmentsPath = path + folderName + "/";
+        String segmentsPath = path + "segments_" + time + "/";
+        folderPath = segmentsPath;
         createSegmentsFolder(segmentsPath);
 
         long duration = getVideoDurationInMs(path + videoName);

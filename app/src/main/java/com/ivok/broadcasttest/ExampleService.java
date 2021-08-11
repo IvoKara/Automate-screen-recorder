@@ -105,13 +105,13 @@ public class ExampleService extends Service {
             mMediaProjection = null;
         }
         FFmpegUsage ffmpeg = new FFmpegUsage(fileName);
-//        DeleteFile(filePath);
-//        SendSyncBroadcast(ffmpeg.getFolderName());
+        DeleteFile(filePath);
+        SendSyncBroadcast(ffmpeg.getFolderPath());
     }
 
-    private void SendSyncBroadcast(String folderName) {
+    private void SendSyncBroadcast(String folderPath) {
         Intent i = new Intent("com.ivok.SYNC_FOLDER");
-        i.putExtra("folderName", folderName);
+        i.putExtra("folderPath", folderPath);
         sendBroadcast(i);
     }
 
