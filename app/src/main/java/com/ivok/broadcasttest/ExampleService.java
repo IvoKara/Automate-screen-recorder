@@ -58,7 +58,7 @@ public class ExampleService extends Service {
     private final int audioSamplingRate = 44100;//44.1kHz
 
     private final boolean isVideoHD = false;
-    private final boolean isAudioEnabled = true;
+    private final boolean isAudioEnabled = false;
     private final boolean isCustomSettingsEnabled = true;
     private boolean hasMaxFileBeenReached = false;
 
