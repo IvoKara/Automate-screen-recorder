@@ -14,25 +14,16 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true">
+
         <activity
             android:name=".QueryActivity"
-            android:theme="@android:style/Theme.NoDisplay"
-
-            />
-        <!--
-        android:alwaysRetainTaskState="true"
-        android:launchMode="singleTask"
-        android:theme="@style/Theme.AppCompat.Light"
-        android:persistableMode=""
-        android:excludeFromRecents="true"
-        -->
+            android:theme="@android:style/Theme.NoDisplay" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -54,10 +45,6 @@
             android:foregroundServiceType="mediaProjection"
             android:requestLegacyExternalStorage="true" />
 
-        <receiver
-            android:name=".NotificationReceiver"
-            android:enabled="true"
-            android:exported="true" />
     </application>
 
 </manifest>

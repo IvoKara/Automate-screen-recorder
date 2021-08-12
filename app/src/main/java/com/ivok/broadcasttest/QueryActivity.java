@@ -1,8 +1,5 @@
 package com.ivok.broadcasttest;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,21 +11,15 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import java.util.Iterator;
-
 public class QueryActivity extends Activity {
 
     private static final int SCREEN_RECORD_REQUEST_CODE = 777;
-    private static final int PERMISSION_REQ_ID_RECORD_AUDIO = 22;
-    private static final int PERMISSION_REQ_ID_WRITE_EXTERNAL_STORAGE = PERMISSION_REQ_ID_RECORD_AUDIO + 1;
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         Toast.makeText(this, "Destroy", Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +32,6 @@ public class QueryActivity extends Activity {
         super.onStart();
         MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         Intent permissionIntent = mediaProjectionManager != null ? mediaProjectionManager.createScreenCaptureIntent() : null;
-//        listExtras(permissionIntent);
         startActivityForResult(permissionIntent, SCREEN_RECORD_REQUEST_CODE);
     }
 
@@ -76,19 +66,6 @@ public class QueryActivity extends Activity {
 
                 this.finish();
             }
-        }
-    }
-
-    private void listExtras(Intent i) {
-        Bundle bundle = i.getExtras();
-        if(bundle != null) {
-            Iterator<String> iterator = bundle.keySet().iterator();
-            while(iterator.hasNext()) {
-                String key = iterator.next();
-                Log.e("Extra", "[" + key + "=" + bundle.get(key) + "]");
-                //i.getParcelableExtra(key);
-            }
-
         }
     }
 }
