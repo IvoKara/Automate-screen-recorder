@@ -4,24 +4,20 @@ import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.Icon;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.Surface;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -32,9 +28,9 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Objects;
 
-public class ExampleService extends Service {
+public class RecordingService extends Service {
 
-    private static final String TAG = "ExampleService";
+    private static final String TAG = "RecordingService";
 
     private final int videoEncoderAsInt = MediaRecorder.VideoEncoder.H264;
     private final int outputFormatAsInt = MediaRecorder.OutputFormat.MPEG_4;
@@ -90,7 +86,7 @@ public class ExampleService extends Service {
 
         //segmentate the the recording file into small chunks in order to send them
         //using the 'ffmpeg-kit' Android library which implements the 'ffmpeg' unix command
-        FFmpegUsage ffmpeg = new FFmpegUsage(fileName);
+        FFmpegSegmentation ffmpeg = new FFmpegSegmentation(fileName);
         //delete the source recording file
         DeleteFile(filePath);
         //Send Broadcast message that is received by 'Automate'

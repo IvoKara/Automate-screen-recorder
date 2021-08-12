@@ -15,11 +15,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class FFmpegUsage {
+public class FFmpegSegmentation {
 
     private String folderPath;
 
-    public FFmpegUsage(String videoName) {
+    public FFmpegSegmentation(String videoName) {
         segmentateVideo(videoName);
     }
 

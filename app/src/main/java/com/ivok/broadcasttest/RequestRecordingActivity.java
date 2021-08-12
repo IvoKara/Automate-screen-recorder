@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public class QueryActivity extends Activity {
+public class RequestRecordingActivity extends Activity {
 
     //code for 'startActivityForResult' and 'onActivityResult'
     private static final int SCREEN_RECORD_REQUEST_CODE = 777;
@@ -47,7 +47,7 @@ public class QueryActivity extends Activity {
             if (resultCode == RESULT_OK) {
 
                 //when everything is OK prepare a Service for recording
-                Intent service = new Intent(this, ExampleService.class);
+                Intent service = new Intent(this, RecordingService.class);
 
                 //get system parameters needed for recording
                 DisplayMetrics displayMetrics = new DisplayMetrics();
