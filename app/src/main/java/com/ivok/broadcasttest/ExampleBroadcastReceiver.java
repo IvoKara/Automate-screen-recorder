@@ -11,14 +11,19 @@ public class ExampleBroadcastReceiver extends BroadcastReceiver {
 
         Intent serviceIntent = new Intent(context, ExampleService.class);
 
+        //received from 'Automate' app that is used to watch if the target app (Facebook)
+        //in in foreground (i.e. if it is launched)
         if("com.ivok.START_SERVICE".equals(intent.getAction())) {
 
+            //start hidden Activity in order to use startActivity for result
             Intent i = new Intent(context, QueryActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         }
 
+        //received from 'Automate' when target app is closed
         if("com.ivok.STOP_SERVICE".equals(intent.getAction())) {
+            //stop the service
             context.stopService(serviceIntent);
         }
     }
