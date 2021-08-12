@@ -19,7 +19,7 @@ public class RequestRecordingActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Destroy", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Destroy", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -42,7 +42,6 @@ public class RequestRecordingActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("ActivityResult", "" + RESULT_OK);
         if (requestCode == SCREEN_RECORD_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 

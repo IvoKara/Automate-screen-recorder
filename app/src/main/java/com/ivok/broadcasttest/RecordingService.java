@@ -67,7 +67,7 @@ public class RecordingService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, TAG + " stopped", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, TAG + " stopped", Toast.LENGTH_LONG).show();
 
         //clear and free all the stuff that was used for the recording
         Log.d(TAG, "onDestroy");
@@ -97,7 +97,7 @@ public class RecordingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Toast.makeText(this, TAG + " started", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, TAG + " started", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onStartCommand");
 
         //on Android 10 only works if it is VOICE RECOGNITION
