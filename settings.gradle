@@ -1,2 +1,2 @@
-rootProject.name = "BroadcastTest"
+rootProject.name = "AutomateScreenRecorder"
 include ':app'

@@ -1,4 +1,4 @@
-package com.ivok.broadcasttest;
+package com.ivok.automatescreenrecorder;
 
 import android.content.Context;
 

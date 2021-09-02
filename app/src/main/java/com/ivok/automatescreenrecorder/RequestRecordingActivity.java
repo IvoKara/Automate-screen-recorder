@@ -1,4 +1,4 @@
-package com.ivok.broadcasttest;
+package com.ivok.automatescreenrecorder;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 public class RequestRecordingActivity extends Activity {
 

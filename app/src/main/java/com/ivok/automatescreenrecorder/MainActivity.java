@@ -1,4 +1,4 @@
-package com.ivok.broadcasttest;
+package com.ivok.automatescreenrecorder;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;

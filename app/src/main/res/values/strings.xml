@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BroadcastTest</string>
+    <string name="app_name">AutomateScreenRecorder</string>
     <string name="start_recording">START</string>
     <string name="stop_recording">STOP</string>
     <string name="record_audio">Record Audio</string>

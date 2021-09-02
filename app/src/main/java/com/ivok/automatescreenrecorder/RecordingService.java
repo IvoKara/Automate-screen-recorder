@@ -1,4 +1,4 @@
-package com.ivok.broadcasttest;
+package com.ivok.automatescreenrecorder;
 
 import android.Manifest;
 import android.app.Notification;
@@ -18,7 +18,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 

@@ -1,9 +1,8 @@
-package com.ivok.broadcasttest;
+package com.ivok.automatescreenrecorder;
 
 import android.media.MediaMetadataRetriever;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.arthenica.ffmpegkit.FFmpegKit;
 import com.arthenica.ffmpegkit.FFmpegSession;

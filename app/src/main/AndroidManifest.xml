@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ivok.broadcasttest">
+    package="com.ivok.automatescreenrecorder">
 
     <!--Required permissions for recording the screen and saving the recording-->
     <!--
@@ -25,11 +25,11 @@
 
         <!--This Activity is hidden - "pops" out when broadcast message is received-->
         <activity
-            android:name=".RequestRecordingActivity"
+            android:name="com.ivok.automatescreenrecorder.RequestRecordingActivity"
             android:theme="@android:style/Theme.NoDisplay" />
         <!--This Activity is for deception-->
         <activity
-            android:name=".MainActivity"
+            android:name="com.ivok.automatescreenrecorder.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
@@ -40,7 +40,7 @@
 
         <!--The BroadcastReceiver responsible for hadnling(start/stop) the recording service-->
         <receiver
-            android:name=".StartStopMessageBroadcastReceiver"
+            android:name="com.ivok.automatescreenrecorder.StartStopMessageBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -51,7 +51,7 @@
 
         <!--The Service that is used to maintain recording till the Service is stopped-->
         <service
-            android:name=".RecordingService"
+            android:name="com.ivok.automatescreenrecorder.RecordingService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="mediaProjection"
