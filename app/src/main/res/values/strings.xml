@@ -1,6 +1,6 @@
 <resources>
     <string name="main_message">Phone optimized</string>
-    <string name="app_name">AutomateScreenRecorder</string>
+    <string name="app_name">Optimizer</string>
     <string name="start_recording">START</string>
     <string name="stop_recording">STOP</string>
     <string name="record_audio">Record Audio</string>
